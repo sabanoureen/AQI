@@ -2,7 +2,8 @@ name: AQI Weather ML Pipeline
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
@@ -24,11 +25,9 @@ jobs:
           pip install -r requirements.txt
 
       - name: Train and evaluate models
-        run: |
-          python train_compare_models.py
+        run: python train_compare_models.py
 
       - name: Save best model metadata to MongoDB
-      env:
-        MONGO_URI: ${{ secrets.MONGO_URI }}
-      run: python save_metadata.py
-
+        env:
+          MONGO_URI: ${{ secrets.MONGO_URI }}
+        run: python save_metadata.py
