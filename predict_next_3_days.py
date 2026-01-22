@@ -1,26 +1,33 @@
-import joblib
+import requests
 import pandas as pd
+import joblib
 from datetime import datetime, timedelta
 
-# 1. Load trained model
-model = joblib.load("models/weather_model.pkl")
+# Load best model
+model = joblib.load("models/best_weather_model.pkl")
 
-# 2. Use last known weather values (demo input)
-last_known = {
-    "humidity": 75,
-    "pressure": 952,
-    "wind_speed": 5
-}
+LAT = 33.766
+LON = 72.751
 
-# 3. Create next 3 days input
-future_dates = [datetime.today() + timedelta(days=i) for i in range(1, 4)]
+url = (
+    "https://api.open-meteo.com/v1/forecast?"
+    f"latitude={LAT}&longitude={LON}"
+    "&current=relative_humidity_2m,pressure_msl,wind_speed_10m"
+)
 
-X_future = pd.DataFrame([last_known] * 3)
+response = requests.get(url)
+response.raise_for_status()
+data = response.json()["current"]
 
-# 4. Predict temperatures
-predictions = model.predict(X_future)
+X_live = pd.DataFrame([{
+    "humidity": data["relative_humidity_2m"],
+    "pressure": data["pressure_msl"],
+    "wind_speed": data["wind_speed_10m"]
+}])
 
-# 5. Display results
-print("\nNext 3-Day Temperature Prediction (Demo):\n")
-for date, temp in zip(future_dates, predictions):
-    print(f"{date.date()} → {temp:.2f} °C")
+prediction = model.predict(X_live)[0]
+
+print("\nNext 3-Day Temperature Prediction for Wah Cantt:\n")
+for i in range(1, 4):
+    date = (datetime.today() + timedelta(days=i)).date()
+    print(f"{date} → {prediction:.2f} °C")

@@ -1,14 +1,25 @@
 import requests
 
-API_KEY = "YOUR_API_KEY"
-CITY = "Wah Cantt"
-URL = f"https://api.openweathermap.org/data/2.5/weather?q={CITY}&appid={API_KEY}&units=metric"
+LAT = 33.766
+LON = 72.751
 
-response = requests.get(URL)
-data = response.json()
+url = (
+    "https://api.open-meteo.com/v1/forecast?"
+    f"latitude={LAT}&longitude={LON}"
+    "&current=temperature_2m,relative_humidity_2m,pressure_msl,wind_speed_10m"
+)
 
-print("LIVE WEATHER")
-print("Temperature:", data["main"]["temp"])
-print("Humidity:", data["main"]["humidity"])
-print("Pressure:", data["main"]["pressure"])
-print("Wind Speed:", data["wind"]["speed"])
+response = requests.get(url)
+response.raise_for_status()
+
+data = response.json()["current"]
+
+live_weather = {
+    "temperature": data["temperature_2m"],
+    "humidity": data["relative_humidity_2m"],
+    "pressure": data["pressure_msl"],
+    "wind_speed": data["wind_speed_10m"]
+}
+
+print("Live Weather in Wah Cantt:")
+print(live_weather)
