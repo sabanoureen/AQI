@@ -28,7 +28,7 @@ jobs:
           python train_compare_models.py
 
       - name: Save best model metadata to MongoDB
-        env:
-          MONGO_URI: ${{ secrets.MONGO_URI }}
-        run: |
-          python save_metadata.py
+      env:
+        MONGO_URI: ${{ secrets.MONGO_URI }}
+      run: python save_metadata.py
+
