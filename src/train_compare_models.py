@@ -4,9 +4,15 @@ from sklearn.linear_model import LinearRegression
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error
+from api_data_loader import fetch_historical_weather
+import sys
+sys.path.append("src")
+
+
 
 # Load dataset
-df = pd.read_csv("data/wah_weather_5_months.csv")
+df = fetch_historical_weather()
+
 
 X = df[["humidity", "pressure", "wind_speed"]]
 y = df["temperature"]
