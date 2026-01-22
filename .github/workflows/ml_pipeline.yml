@@ -25,7 +25,7 @@ jobs:
           pip install -r requirements.txt
 
       - name: Train and evaluate models
-        run: python train_compare_models.py
+        run: python src/train_compare_models.py
 
       - name: Save best model metadata to MongoDB
         env:
