@@ -1,14 +1,17 @@
-# Virtual environment
-venv/
-.env
-
-# Python cache
+# Python
 __pycache__/
 *.pyc
 
-# Model files (optional – keep only if instructor allows)
+# Virtual environments
+venv/
+.env
+
+# Data files
+*.csv
+
+# Model artifacts (optional – keep only best model)
 models/*.pkl
 
-# OS
+# OS files
 .DS_Store
 Thumbs.db
